@@ -7,7 +7,7 @@ class App extends React.Component {
     text: ''
   }
 
-  stream = new EventSource('http://localhost:4000/stream')
+  stream = new EventSource('https://warm-wildwood-83333.herokuapp.com/stream')
 
   componentDidMount() {
 
@@ -25,7 +25,7 @@ class App extends React.Component {
 
     try {
       const response = await superagent
-        .post('http://localhost:4000/message')
+        .post('https://warm-wildwood-83333.herokuapp.com/message')
         .send({ text: this.state.text })
 
       console.log('onSubmit response:', response)
