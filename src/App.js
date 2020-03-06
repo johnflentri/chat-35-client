@@ -2,12 +2,16 @@ import React from 'react';
 import superagent from 'superagent'
 import { connect } from 'react-redux'
 
+const baseUrl = 'http://localhost:4000'
+// const baseUrl = 'https://warm-wildwood-83333.herokuapp.com'
+
 class App extends React.Component {
   state = {
     text: ''
   }
 
-  stream = new EventSource('https://warm-wildwood-83333.herokuapp.com/stream')
+  // stream = new EventSource('https://warm-wildwood-83333.herokuapp.com/stream')
+  stream = new EventSource(`${baseUrl}/stream`)
 
   componentDidMount() {
 
@@ -25,7 +29,8 @@ class App extends React.Component {
 
     try {
       const response = await superagent
-        .post('https://warm-wildwood-83333.herokuapp.com/message')
+        // .post('https://warm-wildwood-83333.herokuapp.com/stream')
+        .post(`${baseUrl}/message`)
         .send({ text: this.state.text })
 
       console.log('onSubmit response:', response)
@@ -49,6 +54,12 @@ class App extends React.Component {
       .props
       .messages
       .map(message => <p>{message}</p>)
+
+    const channels = this
+      .props
+      .channels
+      .map(channel => <p>{channel}</p>)
+
     return <main>
       <form onSubmit={this.onSubmit}>
         <input
@@ -62,6 +73,11 @@ class App extends React.Component {
           Reset
           </button>
       </form>
+
+      <h3>Channels</h3>
+      {channels}
+
+      <h3>Messages</h3>
       {messages}
     </main>
   }
@@ -69,7 +85,8 @@ class App extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    messages: state.messages
+    messages: state.messages,
+    channels: state.channels
   }
 }
 
