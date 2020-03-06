@@ -10,10 +10,12 @@ class App extends React.Component {
   stream = new EventSource('http://localhost:4000/stream')
 
   componentDidMount() {
+
     this.stream.onmessage = (event) => {
       // console.log('event.data test:', event.data);
       const parsed = JSON.parse(event.data)
       this.props.dispatch(parsed)
+      // console.log("this.props here:", this.props);
       // console.log('parsed test:', parsed);
     }
   }
@@ -43,6 +45,10 @@ class App extends React.Component {
   }
 
   render() {
+    const messages = this
+      .props
+      .messages
+      .map(message => <p>{message}</p>)
     return <main>
       <form onSubmit={this.onSubmit}>
         <input
@@ -56,6 +62,7 @@ class App extends React.Component {
           Reset
           </button>
       </form>
+      {messages}
     </main>
   }
 }
