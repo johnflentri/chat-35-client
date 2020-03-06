@@ -1,9 +1,21 @@
 import React from 'react';
 import superagent from 'superagent'
+import { connect } from 'react-redux'
 
 class App extends React.Component {
   state = {
     text: ''
+  }
+
+  stream = new EventSource('http://localhost:4000/stream')
+
+  componentDidMount() {
+    this.stream.onmessage = (event) => {
+      console.log('event.data test:', event.data);
+      const parsed = JSON.parse(event.data)
+      this.props.dispatch(parsed)
+      console.log('parsed test:', parsed);
+    }
   }
 
   onSubmit = async event => {
@@ -48,4 +60,4 @@ class App extends React.Component {
   }
 }
 
-export default App
+export default connect()(App)
