@@ -11,10 +11,10 @@ class App extends React.Component {
 
   componentDidMount() {
     this.stream.onmessage = (event) => {
-      console.log('event.data test:', event.data);
+      // console.log('event.data test:', event.data);
       const parsed = JSON.parse(event.data)
       this.props.dispatch(parsed)
-      console.log('parsed test:', parsed);
+      // console.log('parsed test:', parsed);
     }
   }
 
@@ -26,7 +26,7 @@ class App extends React.Component {
         .post('http://localhost:4000/message')
         .send({ text: this.state.text })
 
-      console.log(response)
+      console.log('onSubmit response:', response)
     } catch (error) {
       console.error(error)
     }
@@ -60,4 +60,10 @@ class App extends React.Component {
   }
 }
 
-export default connect()(App)
+function mapStateToProps(state) {
+  return {
+    messages: state.messages
+  }
+}
+
+export default connect(mapStateToProps)(App)
